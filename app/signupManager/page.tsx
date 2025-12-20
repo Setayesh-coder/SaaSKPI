@@ -67,9 +67,8 @@ export default function SignUpPage() {
             setLoading(false)
             return
         }
-        // ▶ اینجا کد شما تمام می‌شود
 
-        router.push('/dashboard') // بعد از موفقیت، ریدایرکت
+        router.push('/dashboardManager') 
     }
 
     return (

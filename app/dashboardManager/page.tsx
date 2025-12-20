@@ -15,41 +15,28 @@ export default function LoginPage() {
     const handleLogin = async () => {
         setLoading(true)
 
-        const { data, error } = await supabase.auth.signInWithPassword({
+        const { error } = await supabase.auth.signInWithPassword({
             email,
             password,
         })
 
         setLoading(false)
+        // if employee => go to dashboardEmployee
+        // if manager => go to dashboardManager
 
-        if (error) {
-            alert(error.message)
-            return
-        }
-
-        if (!data.user) return
-
-        
-        const role = data.user.app_metadata?.role || data.user.user_metadata?.role
-
-        if (role === 'manager') {
-            router.push('/dashboardManager')  
-        } else {
-            
-            const employeeId = data.user.id
-            router.push(`/dashboardEmployee/${employeeId}`)
-        }
+        if (!error) router.push('/dashboardEmployee')
+        else alert(error.message)
     }
 
     return (
         <div className="max-w-sm mx-auto mt-40 space-y-4">
             <h1 className="text-xl font-bold">Login</h1>
 
-            <Input placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
-            <Input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
+            <Input placeholder="Email" onChange={e => setEmail(e.target.value)} />
+            <Input type="password" placeholder="Password" onChange={e => setPassword(e.target.value)} />
 
             <Button className="w-full" onClick={handleLogin} disabled={loading}>
-                {loading ? 'Loading...' : 'Login'}
+                Login
             </Button>
         </div>
     )
