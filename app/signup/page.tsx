@@ -17,7 +17,7 @@ export default function SignUpPage() {
     const handleSignUp = async () => {
         setLoading(true)
 
-        // ◀ اینجا کد شما شروع می‌شود
+
         const { data: authData, error: authError } = await supabase.auth.signUp({
             email,
             password,
@@ -67,9 +67,9 @@ export default function SignUpPage() {
             setLoading(false)
             return
         }
-        // ▶ اینجا کد شما تمام می‌شود
 
-        router.push('/dashboard') // بعد از موفقیت، ریدایرکت
+
+        router.push('/dashboard')
     }
 
     return (
