@@ -54,7 +54,7 @@ export default function SignUpPage() {
             .from('users')
             .insert([
                 {
-                    id: userId,
+                    auth_user_id: userId,
                     email,
                     name,
                     role: 'super_admin',
