@@ -1,51 +1,89 @@
 // components/ReportHistory.tsx
+'use client';
 
-'use client'
+import { useEffect, useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 
-import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase/client'
-import { format } from 'date-fns'
-
-type Report = {
-  id: string
-  created_at: string
-  content: string
-  // سایر فیلدها...
+interface Report {
+  id: string;
+  date: string;
+  sales: string;
+  calls: number;
+  meetings: number;
+  notes: string;
+  status: "submitted" | "reviewed";
 }
 
 export default function ReportHistory({ employeeId }: { employeeId: string }) {
-  const [reports, setReports] = useState<Report[]>([])
-  const [loading, setLoading] = useState(true)
+  const [reports, setReports] = useState<Report[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchReports() {
-      const { data, error } = await supabase
-        .from('daily_reports')
-        .select('*')
-        .eq('employee_id', employeeId)
-        .order('created_at', { ascending: false })
+    const fetchReports = async () => {
+      try {
+        const res = await fetch(`/api/kpi-log?employeeId=${employeeId}&type=daily_report`);
+        const data = await res.json();
+        setReports(data.reports || []);
+      } catch (err) {
+        console.error("خطا در دریافت تاریخچه");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-      if (!error && data) setReports(data)
-      setLoading(false)
-    }
+    fetchReports();
+  }, [employeeId]);
 
-    fetchReports()
-  }, [employeeId])
+  if (loading) {
+    return (
+      <div className="space-y-4">
+        <Skeleton className="h-12 w-full" />
+        <Skeleton className="h-32 w-full" />
+      </div>
+    );
+  }
 
-  if (loading) return <p>در حال بارگذاری...</p>
-
-  if (reports.length === 0) return <p>گزارشی وجود ندارد.</p>
+  if (reports.length === 0) {
+    return <p className="text-center text-muted-foreground py-8">هنوز گزارشی ارسال نشده است.</p>;
+  }
 
   return (
-    <div className="space-y-4">
-      {reports.map((report) => (
-        <div key={report.id} className="border rounded-lg p-4">
-          <p className="text-sm text-gray-500">
-            {format(new Date(report.created_at), 'yyyy/MM/dd')}
-          </p>
-          <p className="mt-2 whitespace-pre-wrap">{report.content}</p>
-        </div>
-      ))}
-    </div>
-  )
+    <Card>
+      <CardHeader>
+        <CardTitle>گزارش‌های ارسالی</CardTitle>
+        <CardDescription>لیست گزارش‌های روزانه شما در ماه جاری</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>تاریخ</TableHead>
+              <TableHead>فروش</TableHead>
+              <TableHead>تماس</TableHead>
+              <TableHead>جلسه</TableHead>
+              <TableHead>وضعیت</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {reports.map((report) => (
+              <TableRow key={report.id}>
+                <TableCell className="font-medium">{report.date}</TableCell>
+                <TableCell>{report.sales}</TableCell>
+                <TableCell>{report.calls}</TableCell>
+                <TableCell>{report.meetings}</TableCell>
+                <TableCell>
+                  <Badge variant={report.status === "reviewed" ? "secondary" : "default"}>
+                    {report.status === "reviewed" ? "بررسی‌شده" : "ارسالی"}
+                  </Badge>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </CardContent>
+    </Card>
+  );
 }
