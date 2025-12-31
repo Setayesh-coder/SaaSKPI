@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { TrendingUp, Users, DollarSign, Activity, ArrowRight, Check } from "lucide-react";
+import { TrendingUp, Users, DollarSign, Activity, ArrowRight, Check, ArrowLeft } from "lucide-react";
 
 export default function LandingPage() {
   return (
@@ -19,7 +19,7 @@ export default function LandingPage() {
           </p>
           <div className="mt-10 flex items-center justify-center gap-x-6">
             <Button size="lg" className="gap-2">
-              شروع رایگان <ArrowRight className="h-4 w-4" />
+              شروع رایگان <ArrowLeft className="h-4 w-4" />
             </Button>
             <Button size="lg" variant="outline">
               مشاهده دمو

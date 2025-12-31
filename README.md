@@ -34,3 +34,52 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+app
+├── api
+│   ├── departments
+│   │   ├── [id]
+│   │   │   └── route.js
+│   │   └── route.js
+│   ├── kpi-log
+│   │   └── route.ts
+│   ├── kpis
+│   │   ├── id
+│   │   │   └── route.js
+│   │   └── route.ts
+│   ├── manager-access
+│   │   ├── [id]
+│   │   │   └── route.js
+│   │   └── route.js
+│   ├── test.ts
+│   ├── user-kpis
+│   │   ├── [id]
+│   │   │   └── route.js
+│   │   └── route.js
+│   └── users
+│       ├── [id]
+│       │   └── route.js
+│       └── route.js
+├── dashboardEmployee
+│   ├── [id]
+│   │   └── page.tsx
+│   └── page.tsx
+├── dashboardManager
+│   ├── employeeManagement
+│   │   ├── [id]
+│   │   │   └── page.tsx
+│   │   └── page.tsx
+│   ├── layout.tsx
+│   ├── page.tsx
+│   └── reports
+│       └── page.tsx
+├── favicon.ico
+├── globals.css
+├── layout.tsx
+├── login
+│   └── page.tsx
+├── page.tsx
+└── signupManager
+    └── page.tsx
+
+    

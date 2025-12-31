@@ -1,4 +1,4 @@
-// lib/supabase/server.ts
+// utils/supabase/server.ts
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
@@ -10,16 +10,21 @@ export async function createClient() {
         process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
         {
             cookies: {
-                getAll() {
-                    return cookieStore.getAll()
+                get(name: string) {
+                    return cookieStore.get(name)?.value
                 },
-                setAll(cookiesToSet) {
+                set(name: string, value: string, options: any) {
                     try {
-                        cookiesToSet.forEach(({ name, value, options }) => {
-                            cookieStore.set(name, value, options)
-                        })
+                        cookieStore.set({ name, value, ...options })
                     } catch (error) {
-                        // در Server Components گاهی set مجاز نیست — ignore کن
+                        // در برخی محیط‌ها (مثل middleware) set مجاز نیست — ignore کن
+                    }
+                },
+                remove(name: string, options: any) {
+                    try {
+                        cookieStore.set({ name, value: '', ...options })
+                    } catch (error) {
+                        // ignore
                     }
                 },
             },
